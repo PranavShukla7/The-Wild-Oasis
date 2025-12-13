@@ -9,7 +9,7 @@ import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
 import { useForm } from "react-hook-form";
-import { createEditCabin } from "../../services/apiCabins";
+import { createCabin } from "../../services/apiCabins";
 
 function CreateCabinForm() {
   const { register, handleSubmit, reset, getValues, formState } = useForm();
@@ -18,7 +18,7 @@ function CreateCabinForm() {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: (newCabin) => createEditCabin(newCabin),
+    mutationFn: createCabin,
     onSuccess: () => {
       toast.success("New cabin successfully created");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
@@ -31,7 +31,7 @@ function CreateCabinForm() {
     mutate({ ...data, image: data.image[0] });
   }
 
-  function onError() {
+  function onError(errors) {
     // console.log(errors);
   }
 
@@ -87,7 +87,7 @@ function CreateCabinForm() {
           {...register("discount", {
             required: "This field is required",
             validate: (value) =>
-              Number(value) <= Number(getValues().regularPrice) ||
+              value <= getValues().regularPrice ||
               "Discount should be less than regular price",
           })}
         />
