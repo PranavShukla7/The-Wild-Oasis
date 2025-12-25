@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import LoginForm from "../features/authentication/LoginForm";
+import SignupForm from "../features/authentication/SignupForm";
 import Logo from "../ui/Logo";
 import Heading from "../ui/Heading";
+import { Link } from "react-router-dom";
 
-const LoginLayout = styled.main`
+const SignupLayout = styled.main`
   min-height: 100vh;
   display: grid;
   grid-template-columns: 48rem;
@@ -23,18 +23,19 @@ const StyledLink = styled(Link)`
   }
 `;
 
-function Login() {
+function Signup() {
   return (
-    <LoginLayout>
+    <SignupLayout>
       <Logo />
-      <Heading as="h4">Log in to your account</Heading>
-      <LoginForm />
+      <Heading as="h4">Create your new account</Heading>
+      <SignupForm />
       <p style={{ textAlign: "center", marginTop: "1.6rem" }}>
-        Don't have an account?{" "}
-        <StyledLink to="/signup">Sign up instead</StyledLink>
+        Already have an account?{" "}
+        <StyledLink to="/login">Log in instead</StyledLink>
       </p>
-    </LoginLayout>
+    </SignupLayout>
   );
 }
 
-export default Login;
+export default Signup;
+

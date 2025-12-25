@@ -29,17 +29,34 @@ export async function login({ email, password }) {
 }
 
 export async function getCurrentUser() {
-  const { data: session } = await supabase.auth.getSession();
-  if (!session.session) return null;
+  const { data, error: sessionError } = await supabase.auth.getSession();
 
-  const { data, error } = await supabase.auth.getUser();
+  if (sessionError || !data?.session) return null;
 
-  if (error) throw new Error(error.message);
-  return data?.user;
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error) throw error;
+
+  return user;
 }
 
 export async function logout() {
   const { error } = await supabase.auth.signOut();
+  if (error) throw new Error(error.message);
+}
+
+export async function resendConfirmationEmail(email) {
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: email,
+    options: {
+      emailRedirectTo: window.location.origin,
+    },
+  });
+  
   if (error) throw new Error(error.message);
 }
 

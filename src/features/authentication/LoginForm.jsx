@@ -4,12 +4,14 @@ import Form from "../../ui/Form";
 import Input from "../../ui/Input";
 import FormRowVertical from "../../ui/FormRowVertical";
 import { useLogin } from "./useLogin";
+import { useResendConfirmation } from "./useResendConfirmation";
 import SpinnerMini from "../../ui/SpinnerMini";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLoading } = useLogin();
+  const { resendConfirmation, isLoading: isResending } = useResendConfirmation();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -50,10 +52,33 @@ function LoginForm() {
         />
       </FormRowVertical>
       <FormRowVertical>
-        <Button size="large" disabled={isLoading}>
+        <Button size="large" disabled={isLoading || isResending}>
           {!isLoading ? "Log in" : <SpinnerMini />}
         </Button>
       </FormRowVertical>
+      {email && (
+        <FormRowVertical>
+          <p style={{ fontSize: "1.4rem", color: "var(--color-grey-600)", textAlign: "center" }}>
+            Need to verify your email?{" "}
+            <button
+              type="button"
+              onClick={() => resendConfirmation(email)}
+              disabled={isResending || isLoading}
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--color-brand-600)",
+                textDecoration: "underline",
+                cursor: isResending || isLoading ? "not-allowed" : "pointer",
+                fontWeight: "500",
+                padding: 0,
+              }}
+            >
+              {isResending ? "Sending..." : "Resend confirmation email"}
+            </button>
+          </p>
+        </FormRowVertical>
+      )}
     </Form>
   );
 }
