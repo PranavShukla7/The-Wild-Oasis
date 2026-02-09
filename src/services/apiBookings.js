@@ -3,11 +3,13 @@ import supabase from "./supabase";
 import { PAGE_SIZE } from "../utils/constants";
 
 export async function getBookings({ filter, sortBy, page }) {
+  console.log("getBookings called with:", { filter, sortBy, page });
+
   let query = supabase
     .from("bookings")
     .select(
       'id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests("full name", email)',
-      { count: "exact" }
+      { count: "exact" },
     );
 
   // FILTER
@@ -27,8 +29,10 @@ export async function getBookings({ filter, sortBy, page }) {
 
   const { data, error, count } = await query;
 
+  console.log("Query result:", { data, error, count });
+
   if (error) {
-    console.error(error);
+    console.error("Error fetching bookings:", error);
     throw new Error("Bookings could not be loaded");
   }
 
@@ -89,7 +93,7 @@ export async function getStaysTodayActivity() {
     .from("bookings")
     .select('*, guests("full name", nationality, countryFlag)')
     .or(
-      `and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`
+      `and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`,
     )
     .order("created_at");
 

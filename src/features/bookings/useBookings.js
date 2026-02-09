@@ -26,12 +26,26 @@ export function useBookings() {
   // QUERY
   const {
     isLoading,
-    data: { data: bookings, count } = {},
+    data = { data: [], count: 0 },
     error,
   } = useQuery({
     queryKey: ["bookings", filter, sortBy, page],
     queryFn: () => getBookings({ filter, sortBy, page }),
   });
+
+  const bookings = data?.data || [];
+  const count = data?.count || 0;
+
+  console.log(
+    "useBookings - bookings:",
+    bookings,
+    "count:",
+    count,
+    "isLoading:",
+    isLoading,
+    "error:",
+    error,
+  );
 
   // PRE-FETCHING
   const pageCount = Math.ceil(count / PAGE_SIZE);

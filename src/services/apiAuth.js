@@ -29,16 +29,16 @@ export async function login({ email, password }) {
 }
 
 export async function getCurrentUser() {
-  const { data, error: sessionError } = await supabase.auth.getSession();
+  const { data: session } = await supabase.auth.getSession();
 
-  if (sessionError || !data?.session) return null;
+  if (!session?.session) return null;
 
   const {
     data: { user },
     error,
   } = await supabase.auth.getUser();
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
 
   return user;
 }
@@ -50,13 +50,13 @@ export async function logout() {
 
 export async function resendConfirmationEmail(email) {
   const { error } = await supabase.auth.resend({
-    type: 'signup',
+    type: "signup",
     email: email,
     options: {
       emailRedirectTo: window.location.origin,
     },
   });
-  
+
   if (error) throw new Error(error.message);
 }
 
