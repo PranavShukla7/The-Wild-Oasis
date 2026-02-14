@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { isFuture, isPast, isToday } from "date-fns";
+import styled from "styled-components";
 import supabase from "../services/supabase";
 import Button from "../ui/Button";
 import { subtractDates } from "../utils/helpers";
@@ -100,6 +101,25 @@ async function createBookings() {
   if (error) console.log(error.message);
 }
 
+const StyledUploader = styled.div`
+  margin-top: auto;
+  background-color: var(--color-grey-50);
+  border: 1px solid var(--color-grey-200);
+  padding: 0.8rem;
+  border-radius: var(--border-radius-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-grey-700);
+    letter-spacing: 0.5px;
+  }
+`;
+
 function Uploader() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -126,18 +146,7 @@ function Uploader() {
   }
 
   return (
-    <div
-      style={{
-        marginTop: "auto",
-        backgroundColor: "#e0e7ff",
-        padding: "8px",
-        borderRadius: "5px",
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-      }}
-    >
+    <StyledUploader>
       <h3>SAMPLE DATA</h3>
 
       <Button onClick={uploadAll} disabled={isLoading}>
@@ -147,7 +156,7 @@ function Uploader() {
       <Button onClick={uploadBookings} disabled={isLoading}>
         Upload bookings ONLY
       </Button>
-    </div>
+    </StyledUploader>
   );
 }
 

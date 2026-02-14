@@ -90,7 +90,9 @@ function BookingRow({
         </span>
       </Stacked>
 
-      <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+      <Tag type={statusToTagName[status]}>
+        {status ? status.replace("-", " ") : "unknown"}
+      </Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
 
